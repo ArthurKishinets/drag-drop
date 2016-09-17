@@ -1,0 +1,4 @@
+<div draggable="true" ondragstart="ctrl.dragstartHandler();" ng-click="ctrl.clicked()">
+    <h2>{{ctrl.myarticle.webTitle | limitTo: 40}}</h2>
+    <p>{{ctrl.myarticle.blocks.body[0].bodyTextSummary | limitTo: 200}}</p>
+</div>

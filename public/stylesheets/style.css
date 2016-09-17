@@ -1,8 +1,39 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-}
 
+   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+ }
 a {
   color: #00B7FF;
+}
+.container-fluid {
+  /*widows: 95%;*/
+}
+.shortArticle {
+  background-color: #00B7FF ;
+  min-height: 250px;
+  border-radius: 4px;
+  margin: 20px 20px 0px 0;
+  cursor: pointer;
+}
+.shortArticle:nth-child(1) {
+  background-color:  brown;
+}
+.main_article {
+  width: 1250px;
+  height:  400px;
+}
+.regular_article {
+  width: 310px;
+  height:  200px;
+}
+.newsButton {
+  display: block;
+  max-width: 100px;
+  margin:  20px auto;
+}
+.dragelem {
+  background-color: black;
+}
+.articlesall {
+
 }

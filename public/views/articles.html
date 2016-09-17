@@ -1,24 +1,27 @@
-<!DOCTYPE html>
-<html>
+<h1>articles angular page</h1>
 
-<head>
-	<title>Micheev</title>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" type="text/css" href="../stylesheets/style.css">
+<div class="container-fluid">
+    <div class="row">
+        <div class="articlesall col-sm-10 col-sm-offset-1">
+            <div draggable="true" ng-repeat="article in main.articles" class="shortArticle col-xs-6 col-md-3 col-ld-3">
+                <h2>{{article.webTitle | limitTo: 40}}</h2>
 
-	<!-- HTML5 SHIV -->
-	<!--[if lt IE 9]>
-		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.js"></script>
-	<![endif]-->
-</head>
+                <p>{{article.blocks.body[0].bodyTextSummary | limitTo: 200}}</p>
+            </div>
+        </div>
+    </div>
+</div>
 
-<body>
-	
-	<h1>articles</h1>
+<h2>My draggable here</h2>
 
-	<script   src="https://code.jquery.com/jquery-3.1.0.min.js"   integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s="   crossorigin="anonymous"></script>
-	<script type="text/javascript" src="../javascripts/script.js"></script>
-</body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="articlesall col-sm-10 col-sm-offset-1">
+            <div ng-repeat="article in main.articles" class="shortArticle col-xs-6 col-md-3 col-ld-3">
+                <my-draggable article="article"></my-draggable>
+            </div>
+        </div>
+    </div>
+</div>
 
-</html>
+<button class="btn btn-success newsButton" disabled="disabled">Show news</button>
