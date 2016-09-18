@@ -1,4 +1,5 @@
-<div draggable="true" ondragstart="angular.element(this).scope().ctrl.dragstartHandler();" ng-click="ctrl.clicked()">
-    <h2>{{ctrl.myarticle.webTitle | limitTo: 40}}</h2>
+<div draggable="true" >
+    <h2>{{ctrl.myarticle.webTitle | limitTo: 30}}</h2>
+    <img ng-src="{{ctrl.myarticle.blocks.main.elements[0].assets[0].file}}" alt="img"/>
     <p>{{ctrl.myarticle.blocks.body[0].bodyTextSummary | limitTo: 200}}</p>
 </div>

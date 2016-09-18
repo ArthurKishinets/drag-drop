@@ -1,27 +1,26 @@
-<h1>articles angular page</h1>
+<h1>Articles page</h1>
 
 <div class="container-fluid">
-    <div class="row">
-        <div class="articlesall col-sm-10 col-sm-offset-1">
-            <div draggable="true" ng-repeat="article in main.articles" class="shortArticle col-xs-6 col-md-3 col-ld-3">
-                <h2>{{article.webTitle | limitTo: 40}}</h2>
-
-                <p>{{article.blocks.body[0].bodyTextSummary | limitTo: 200}}</p>
+    <div class="row artrow">
+        <div class="articlesall">
+            <div ng-repeat="article in main.articles" class="shortArticle col-xs-6 col-md-3 col-ld-3" data-count="{{$index}}">
+                <my-draggable id="{{$index}}" article="article" index=""></my-draggable>
             </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="dropDiv">
+
+            <my-droppable id="firstDroppable"></my-droppable>
+            <my-droppable id="secondDroppable"></my-droppable>
+            <my-droppable id="thirdDroppable"></my-droppable>
+            <my-droppable id="forthDroppable"></my-droppable>
+            <my-droppable id="fifthDroppable"></my-droppable>
+            
         </div>
     </div>
 </div>
 
-<h2>My draggable here</h2>
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="articlesall col-sm-10 col-sm-offset-1">
-            <div ng-repeat="article in main.articles" class="shortArticle col-xs-6 col-md-3 col-ld-3">
-                <my-draggable article="article"></my-draggable>
-            </div>
-        </div>
-    </div>
-</div>
 
-<button class="btn btn-success newsButton" disabled="disabled">Show news</button>
+<button class="btn btn-success newsButton" disabled="disabled"><a href="#/news">Show news</a></button>

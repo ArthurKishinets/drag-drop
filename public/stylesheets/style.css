@@ -1,22 +1,29 @@
 body {
-
+  background-color: #f2f2f2;
    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  text-align: center;
  }
-a {
-  color: #00B7FF;
+a, a:hover {
+  color: inherit;
+}
+a:hover {
+  text-decoration: none;
 }
 .container-fluid {
-  /*widows: 95%;*/
+  width: 95%;
+  margin: 0 auto;
 }
 .shortArticle {
-  background-color: #00B7FF ;
+  background-color: #00bfff ;
   min-height: 250px;
   border-radius: 4px;
   margin: 20px 20px 0px 0;
   cursor: pointer;
 }
-.shortArticle:nth-child(1) {
-  background-color:  brown;
+my-droppable .shortArticle {
+  margin: 20px auto;
+  float: none;
+  width: 310px;
 }
 .main_article {
   width: 1250px;
@@ -25,6 +32,7 @@ a {
 .regular_article {
   width: 310px;
   height:  200px;
+  transition:  2s;
 }
 .newsButton {
   display: block;
@@ -34,6 +42,55 @@ a {
 .dragelem {
   background-color: black;
 }
-.articlesall {
-
+my-droppable {
+  display: inline-block;
+  padding:  25px 0;
+  height: auto;
+  min-height: 200px;
+  min-width: 310px;
+  background-color: #ff3333;
+  margin-top: 20px;
+  border-radius: 8px;
+}
+#firstDroppable {
+  display:  block;
+  height: 400px;
+  width: 1250px;
+  background-color: #0086b3;
+  margin: 0 auto;
+}
+.smaller {
+  -ms-transform: scale(0.5, 0.5);
+  -webkit-transform: scale(0.5, 0.5);
+  transform: scale(0.5, 0.5);
+  transition: 2s;
+}
+my-draggable {
+  text-align: center;
+  margin: 0 auto;
+  color: #ffffff;
+  max-width: 500px;
+}
+my-draggable img{
+  height: 100px;
+}
+.news {
+  width: 70%;
+}
+.allTheNews {
+  width: 80%;
+  max-width: 2200px;
+  margin: 0 auto;
+}
+get-new {
+  width: 90%;
+  background-color: #fcfcfc;
+}
+get-new img, get-new p {
+  width: 90%;
+  margin: 15px auto;
+  text-align: justify;
+}
+.artrow {
+  padding: 20px;
 }

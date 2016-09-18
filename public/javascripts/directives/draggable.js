@@ -1,6 +1,6 @@
 module.exports = function() {
     return {
-        restrict: 'EA',
+        restrict: 'E',
         bindToController: true,
         scope: {
            myarticle: '=article'
@@ -8,14 +8,15 @@ module.exports = function() {
         controllerAs: 'ctrl',
         templateUrl: '../../views/draggableArticle.html',
         link: function(scope, element, attr) {
+            element.on('dragstart', function(evt) {
+                // pass id of the block to the dragged data
+                evt.originalEvent.dataTransfer.setData('text', element.attr('id'));
+            });
+            element.on('drop', function(evt) {
+                evt.preventDefault();
+            });
         },
         controller: function() {
-            this.clicked = function() {
-                alert('clicked');
-            };
-            this.dragstartHandler = function() {
-                alert('drag');
-           };
         }
     };
  };

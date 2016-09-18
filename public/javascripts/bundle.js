@@ -32847,18 +32847,30 @@ require('./angular');
 module.exports = angular;
 
 },{"./angular":3}],5:[function(require,module,exports){
-module.exports = function($http, $scope) {
+module.exports = ["$http", "$scope", function($http, $scope) {
     var main = this;
     $http.get("//content.guardianapis.com/search?order-by=newest&q=literature%20books&show-blocks=all&api-key=test")
         .then(function(response) {
+            // get 5 articles from guardian
             main.articles = response.data.response.results.slice(5);
+            for ( var i = 0; i < main.articles.length; i++ ) {
+                main.articles[i].id = i;
+            }
+            // saving to localstorage
+            localStorage.articles = JSON.stringify(main.articles);
             console.log(main.articles);
         });
-};
+}];
 },{}],6:[function(require,module,exports){
+module.exports = ["getArticles", function(getArticles) {
+    this.getArticles = getArticles.getAllArticles;
+    // getting articles in the Right Order
+    this.articles = this.getArticles();
+}];
+},{}],7:[function(require,module,exports){
 module.exports = function() {
     return {
-        restrict: 'EA',
+        restrict: 'E',
         bindToController: true,
         scope: {
            myarticle: '=article'
@@ -32866,36 +32878,151 @@ module.exports = function() {
         controllerAs: 'ctrl',
         templateUrl: '../../views/draggableArticle.html',
         link: function(scope, element, attr) {
+            element.on('dragstart', function(evt) {
+                // pass id of the block to the dragged data
+                evt.originalEvent.dataTransfer.setData('text', element.attr('id'));
+            });
+            element.on('drop', function(evt) {
+                evt.preventDefault();
+            });
         },
         controller: function() {
-            this.clicked = function() {
-                alert('clicked');
-            };
-            this.dragstartHandler = function() {
-                alert('drag');
-           };
         }
     };
  };
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
+module.exports = ["$rootScope", function( $rootScope ) {
+    return {
+        restrict: 'E',
+        controllerAs: 'drop',
+        template: '<div class="dropZone"></div>',
+        link: function(scope, element, attr) {
+            element.on('drop', function(evt) {
+                evt.preventDefault();
+                console.log(!$(evt.target).find('div').hasClass('dropZone'));
+                if (!$(evt.target).find('div').hasClass('dropZone')) {
+                    console.log('THERE IS NO DROPZONE CLASS');
+                    return false;
+                }
+
+                var id = evt.originalEvent.dataTransfer.getData("text");
+                var elem  = document.getElementById(id).parentNode;
+
+                $rootScope.news.push(id);
+                //console.log('classlist', evt.target.className);
+
+                //$('.dropZone')[0].appendChild(elem);
+                /*if (evt.target.classList.contains('dropZone')) {
+                    console.log('yes');
+
+                }*/
+                evt.target.appendChild(elem);
+                //console.log(evt.target);
+
+                elem.removeAttribute("draggable");
+                $('.dropZone div').attr('draggable', 'false');
+                //var height = $('.dropDiv').height();
+                //$('.dropZone').css({"height": height - 10 + "px"});
+
+                //evt.target.childNodes.className = "";
+                $(evt.target).find('div').has('dropZone').removeClass('dropZone');
+                $(evt.target).find('div').removeClass('dropZone');
+                $(evt.target).removeClass('dropZone');
+                console.log('removed', $(evt.target).find('div').has('dropZone'));
+                // if we moved all the articles enable button to the news
+                if(!$('.articlesall div').length) {
+                    $('.newsButton')[0].removeAttribute('disabled');
+                    console.log($('.newsButton')[0]);
+                    console.log($rootScope.news);
+                }
+            });
+            element.on('dragover', function(evt) {
+                evt.preventDefault();
+            });
+        },
+        controller: function() {
+        }
+    };
+}];
+},{}],9:[function(require,module,exports){
+module.exports = [ "$rootScope", function($rootScope) {
+    return {
+        restrict: 'E',
+        scope: {
+            article: '='
+        },
+        transclude: "true",
+        templateUrl: '../../views/getnew.html',
+        link: function(scope, element, attr) {
+
+        }
+    };
+}];
+},{}],10:[function(require,module,exports){
 var angular = require('angular');
 var ngRoute = require('angular-route');
 var mainCtrl = require('./controllers/mainCtrl');
+var newsCtrl = require('./controllers/newsCtrl');
 var draggable = require('./directives/draggable');
+var droppable = require('./directives/droppable');
+var getnew = require('./directives/news');
+var getArticle = require('./services/getArticles');
 
 
 angular.module('solutions', [ngRoute])
  .config([ "$routeProvider", function($routeProvider){
         $routeProvider
-            .when("/", {
-                templateUrl : "../views/index.html"
+            .when("/news", {
+                templateUrl : "../views/news.html",
+                controller: "newsCtrl",
+                controllerAs: "news"
             })
             .when("/articles", {
-                templateUrl : "../views/articles.html"
+                templateUrl : "../views/articles.html",
+                //controller: 'mainCtrl',
+                controllerAs: 'main'
             });
+    }]).run(["$rootScope", function($rootScope) {
+        $rootScope.news = [];
+        console.log('root', $rootScope.news);
     }]);
 
 angular.module('solutions')
     .controller('mainCtrl', mainCtrl)
-    .directive('myDraggable', draggable);
-},{"./controllers/mainCtrl":5,"./directives/draggable":6,"angular":4,"angular-route":2}]},{},[7]);
+    .controller('newsCtrl', newsCtrl)
+    .directive('myDraggable', draggable)
+    .directive('myDroppable', droppable)
+    .directive('getNew', getnew)
+    .service('getArticles', getArticle);
+},{"./controllers/mainCtrl":5,"./controllers/newsCtrl":6,"./directives/draggable":7,"./directives/droppable":8,"./directives/news":9,"./services/getArticles":11,"angular":4,"angular-route":2}],11:[function(require,module,exports){
+module.exports = ["$rootScope", function( $rootScope ) {
+
+
+    function getAllArticles() {
+        var sorted = [], news =  JSON.parse(localStorage.articles), currentArticle = [];
+        console.log('getAllarticles');
+        console.log('  ROOT', $rootScope.news);
+        for( var i = 0; i < news.length; i++ ) {
+            currentArticle = news.filter(function(item) {
+                return +item.id === +$rootScope.news[i];
+            });
+            sorted.push(currentArticle[0]);
+           /* for( var j = 0; j < $rootScope.news.length; i++ ) {
+                if ( +$rootScope.news[j] === +news[i].id) {
+                    console.log('match', +$rootScope.news[i], +news[i].id );
+                    sorted.push(news[i]);
+                }
+                else {
+                    console.log('not match', +$rootScope.news[i], +news[i].id);
+                }
+            }*/
+        }
+        console.log('SORTED', sorted);
+        return sorted;
+    }
+
+    return {
+        getAllArticles: getAllArticles
+    };
+}];
+},{}]},{},[10]);
