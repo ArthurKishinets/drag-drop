@@ -15,9 +15,8 @@ module.exports = ["$rootScope", function( $rootScope ) {
                 var elem  = document.getElementById(id).parentNode;
                 // insert id to array that we will use to display article in the right order
                 var containerId = $(evt)[0].target.attributes['data-count'].value;
+                // place article in array in right order
                 $rootScope.news[containerId] = id;
-                //console.log($(evt).currentTarget.attributes[1].value);
-                console.log($(evt)[0].target.attributes['data-count'].value);
                 // insert element
                 evt.target.appendChild(elem);
                 // make this block undraggable in future
