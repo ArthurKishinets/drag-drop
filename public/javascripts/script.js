@@ -18,9 +18,9 @@ angular.module('solutions', [ngRoute])
             })
             .when("/articles", {
                 templateUrl : "../views/articles.html",
-                //controller: 'mainCtrl',
                 controllerAs: 'main'
-            });
+            })
+            .otherwise("/articles");
     }]).run(["$rootScope", function($rootScope) {
         $rootScope.news = [];
         console.log('root', $rootScope.news);

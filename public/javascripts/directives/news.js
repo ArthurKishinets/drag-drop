@@ -7,7 +7,6 @@ module.exports = [ "$rootScope", function($rootScope) {
         transclude: "true",
         templateUrl: '../../views/getnew.html',
         link: function(scope, element, attr) {
-
         }
     };
 }];

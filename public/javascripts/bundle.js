@@ -32899,41 +32899,25 @@ module.exports = ["$rootScope", function( $rootScope ) {
         link: function(scope, element, attr) {
             element.on('drop', function(evt) {
                 evt.preventDefault();
-                console.log(!$(evt.target).find('div').hasClass('dropZone'));
+                //if we already droped something in this area or we are not allowed to drop here then cancel
                 if (!$(evt.target).find('div').hasClass('dropZone')) {
-                    console.log('THERE IS NO DROPZONE CLASS');
                     return false;
                 }
-
+                // getting id of the droped block and it`s parent element
                 var id = evt.originalEvent.dataTransfer.getData("text");
                 var elem  = document.getElementById(id).parentNode;
-
+                // insert id to array that we will use to display article in the right order
                 $rootScope.news.push(id);
-                //console.log('classlist', evt.target.className);
-
-                //$('.dropZone')[0].appendChild(elem);
-                /*if (evt.target.classList.contains('dropZone')) {
-                    console.log('yes');
-
-                }*/
+                // insert element
                 evt.target.appendChild(elem);
-                //console.log(evt.target);
-
-                elem.removeAttribute("draggable");
-                $('.dropZone div').attr('draggable', 'false');
-                //var height = $('.dropDiv').height();
-                //$('.dropZone').css({"height": height - 10 + "px"});
-
-                //evt.target.childNodes.className = "";
-                $(evt.target).find('div').has('dropZone').removeClass('dropZone');
+                // make this block undraggable in future
+                $('#' + id + ' div').removeAttr("draggable");
+                console.log('shit', $('#' + id + ' div') )
+                // make droppable block undroppable in future
                 $(evt.target).find('div').removeClass('dropZone');
-                $(evt.target).removeClass('dropZone');
-                console.log('removed', $(evt.target).find('div').has('dropZone'));
                 // if we moved all the articles enable button to the news
                 if(!$('.articlesall div').length) {
                     $('.newsButton')[0].removeAttribute('disabled');
-                    console.log($('.newsButton')[0]);
-                    console.log($rootScope.news);
                 }
             });
             element.on('dragover', function(evt) {
@@ -32954,7 +32938,6 @@ module.exports = [ "$rootScope", function($rootScope) {
         transclude: "true",
         templateUrl: '../../views/getnew.html',
         link: function(scope, element, attr) {
-
         }
     };
 }];
@@ -32979,9 +32962,9 @@ angular.module('solutions', [ngRoute])
             })
             .when("/articles", {
                 templateUrl : "../views/articles.html",
-                //controller: 'mainCtrl',
                 controllerAs: 'main'
-            });
+            })
+            .otherwise("/articles");
     }]).run(["$rootScope", function($rootScope) {
         $rootScope.news = [];
         console.log('root', $rootScope.news);
@@ -32997,25 +32980,14 @@ angular.module('solutions')
 },{"./controllers/mainCtrl":5,"./controllers/newsCtrl":6,"./directives/draggable":7,"./directives/droppable":8,"./directives/news":9,"./services/getArticles":11,"angular":4,"angular-route":2}],11:[function(require,module,exports){
 module.exports = ["$rootScope", function( $rootScope ) {
 
-
     function getAllArticles() {
         var sorted = [], news =  JSON.parse(localStorage.articles), currentArticle = [];
-        console.log('getAllarticles');
-        console.log('  ROOT', $rootScope.news);
         for( var i = 0; i < news.length; i++ ) {
+            //find article that should be at "i" place by comparing id`s
             currentArticle = news.filter(function(item) {
                 return +item.id === +$rootScope.news[i];
             });
             sorted.push(currentArticle[0]);
-           /* for( var j = 0; j < $rootScope.news.length; i++ ) {
-                if ( +$rootScope.news[j] === +news[i].id) {
-                    console.log('match', +$rootScope.news[i], +news[i].id );
-                    sorted.push(news[i]);
-                }
-                else {
-                    console.log('not match', +$rootScope.news[i], +news[i].id);
-                }
-            }*/
         }
         console.log('SORTED', sorted);
         return sorted;

@@ -6,41 +6,25 @@ module.exports = ["$rootScope", function( $rootScope ) {
         link: function(scope, element, attr) {
             element.on('drop', function(evt) {
                 evt.preventDefault();
-                console.log(!$(evt.target).find('div').hasClass('dropZone'));
+                //if we already droped something in this area or we are not allowed to drop here then cancel
                 if (!$(evt.target).find('div').hasClass('dropZone')) {
-                    console.log('THERE IS NO DROPZONE CLASS');
                     return false;
                 }
-
+                // getting id of the droped block and it`s parent element
                 var id = evt.originalEvent.dataTransfer.getData("text");
                 var elem  = document.getElementById(id).parentNode;
-
+                // insert id to array that we will use to display article in the right order
                 $rootScope.news.push(id);
-                //console.log('classlist', evt.target.className);
-
-                //$('.dropZone')[0].appendChild(elem);
-                /*if (evt.target.classList.contains('dropZone')) {
-                    console.log('yes');
-
-                }*/
+                // insert element
                 evt.target.appendChild(elem);
-                //console.log(evt.target);
-
-                elem.removeAttribute("draggable");
-                $('.dropZone div').attr('draggable', 'false');
-                //var height = $('.dropDiv').height();
-                //$('.dropZone').css({"height": height - 10 + "px"});
-
-                //evt.target.childNodes.className = "";
-                $(evt.target).find('div').has('dropZone').removeClass('dropZone');
+                // make this block undraggable in future
+                $('#' + id + ' div').removeAttr("draggable");
+                console.log('shit', $('#' + id + ' div') )
+                // make droppable block undroppable in future
                 $(evt.target).find('div').removeClass('dropZone');
-                $(evt.target).removeClass('dropZone');
-                console.log('removed', $(evt.target).find('div').has('dropZone'));
                 // if we moved all the articles enable button to the news
                 if(!$('.articlesall div').length) {
                     $('.newsButton')[0].removeAttribute('disabled');
-                    console.log($('.newsButton')[0]);
-                    console.log($rootScope.news);
                 }
             });
             element.on('dragover', function(evt) {
