@@ -32907,12 +32907,14 @@ module.exports = ["$rootScope", function( $rootScope ) {
                 var id = evt.originalEvent.dataTransfer.getData("text");
                 var elem  = document.getElementById(id).parentNode;
                 // insert id to array that we will use to display article in the right order
-                $rootScope.news.push(id);
+                var containerId = $(evt)[0].target.attributes['data-count'].value;
+                $rootScope.news[containerId] = id;
+                //console.log($(evt).currentTarget.attributes[1].value);
+                console.log($(evt)[0].target.attributes['data-count'].value);
                 // insert element
                 evt.target.appendChild(elem);
                 // make this block undraggable in future
                 $('#' + id + ' div').removeAttr("draggable");
-                console.log('shit', $('#' + id + ' div') )
                 // make droppable block undroppable in future
                 $(evt.target).find('div').removeClass('dropZone');
                 // if we moved all the articles enable button to the news
@@ -32966,7 +32968,7 @@ angular.module('solutions', [ngRoute])
             })
             .otherwise("/articles");
     }]).run(["$rootScope", function($rootScope) {
-        $rootScope.news = [];
+        $rootScope.news = [], localStorage.articles = [];
         console.log('root', $rootScope.news);
     }]);
 

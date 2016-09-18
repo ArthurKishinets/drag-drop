@@ -22,7 +22,7 @@ angular.module('solutions', [ngRoute])
             })
             .otherwise("/articles");
     }]).run(["$rootScope", function($rootScope) {
-        $rootScope.news = [];
+        $rootScope.news = [], localStorage.articles = [];
         console.log('root', $rootScope.news);
     }]);
 
